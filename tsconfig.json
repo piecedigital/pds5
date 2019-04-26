@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "outDir": "dist",
+        "rootDir": "src",
+        "lib": [
+            "es5",
+            "es6",
+            "es2017",
+            "dom"
+        ]
+    },
+    "typeAcquisition": {
+        "include": [
+            "node",
+        ]
+    }
+}

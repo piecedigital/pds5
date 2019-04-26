@@ -1,0 +1,131 @@
+<div class="page-wrap piecedigital-net portfolio">
+    <div class="tabs"></div>
+    <section class="section projects-section">
+        <form action="/api/pds5/remove-project" method="POST">
+            <h2>List of Projects</h2>
+            <div class="projects">
+                {{#each pds5-projects as |project|}}
+                    <div class="project">
+                        <input id="{{project.projectPK}}" type="checkbox" name="projectPK" value={{project.projectPK}} />
+                        <label for="{{project.projectPK}}">
+                            {{!-- <div class="image">
+                                <img src="{{job.img}}" alt="{{job.description}}" />
+                            </div> --}}
+                            <div class="info">
+                                <div class="project-name">
+                                    <h3>{{#filter project.projectName "newLineTitle"}}{{/filter}}</h3>
+                                </div>
+                            </div>
+                            <div class="separator"></div>
+                            <div class="description">
+                                {{{project.desc}}}
+                            </div>
+                        </label>
+                    </div>
+                {{/each}}
+            </div>
+            <button>Remove Selected</button>
+        </form>
+        <hr class="separator">
+        </hr>
+        <form class="add-project-form" action="/api/pds5/add-project" method="POST">
+            <h2>Add New Project</h2>
+            <div>
+                <label for="">Project Name</label><br />
+                <input type="text" name="projectName" />
+            </div>
+
+            <div>
+                <label for="">Show Image Preview?</label>
+                <input type="checkbox" name="projectImage" value="true"/>
+            </div>
+
+            <div>
+                <label for="">Project Description</label><br />
+                <textarea type="text" name="projectDescription" rows="10" placeholder="Language: JavaScript, CSS
+Other: food"></textarea>
+            </div>
+
+            <div>
+                <label for="">Project Skills</label><br />
+                <textarea type="text" name="projectSkills"></textarea>
+            </div>
+
+            <div>
+                <label for="">Project Links</label><br />
+                <textarea type="text" name="projectLinks"></textarea>
+            </div>
+
+            <div>
+                <label for="">Number of Gallery Images</label><br />
+                <input type="number" name="projectGallery" value="0"/>
+            </div>
+            <button>Submit</button>
+        </form>
+    </section>
+    <section class="section jobs-section">
+        <form action="/api/pds5/remove-job" method="POST">
+            <h2>List of jobs</h2>
+            <div class="jobs">
+                {{#each pds5-jobs as |job|}}
+                <div class="job">
+                    <input id="{{job.jobPK}}" type="checkbox" name="jobPK" value={{job.jobPK}} />
+                    <label for="{{job.jobPK}}">
+                        {{!-- <div class="image">
+                            <img src="{{job.img}}" alt="{{job.description}}" />
+                        </div> --}}
+                        <div class="info">
+                            <div class="job-name">
+                                <h3>{{job.jobName}}</h3>
+                            </div>
+                        </div>
+                        <div class="separator"></div>
+                        <div class="description">
+                            {{{project.jobDescription}}}
+                        </div>
+                    </label>
+                </div>
+                {{/each}}
+            </div>
+            <button>Remove Selected</button>
+        </form>
+        <hr class="separator">
+        </hr>
+        <form class="add-job-form" action="/api/pds5/add-job" method="POST">
+            <h2>Add New Job</h2>
+            <div>
+                <label for="">Job Title</label><br />
+                <input type="text" name="jobTitle" />
+            </div>
+            <div>
+                <label for="">Job Site</label><br />
+                <input type="text" name="jobSite" />
+            </div>
+            <div>
+                <label for="">Job Name</label><br />
+                <input type="text" name="jobName" />
+            </div>
+            <div>
+                <label for="">Job Start Date</label><br />
+                <input type="date" name="jobStartDate" />
+            </div>
+            <div>
+                <label for="">Job Is Current</label>
+                <input type="checkbox" name="jobIsCurrent" class="job-is-current" /><br />
+                <span class="job-end-date">
+                    <label for="">Job End Date</label><br />
+                    <input type="date" name="jobEndDate" />
+                </span>
+            </div>
+            <div>
+                <label for="">Job Description</label><br />
+                <textarea type="text" name="jobDescription"></textarea>
+            </div>
+            <div>
+                <label for="">Job Tasks</label><br />
+                <textarea type="text" name="jobTasks"></textarea>
+            </div>
+            <button>Submit</button>
+        </form>
+    </section>
+</div>

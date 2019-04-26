@@ -1,0 +1,13 @@
+{
+    "name": "Piece Digital Projects and Jobs Manager",
+    "description": "This plugin manages the data of jobs and projects created by Piece Digital",
+    "dateCreated": "April 4, 2019",
+    "author": "Darryl Dixon",
+    "company": "Piece Digital Studios",
+
+    "databaseCollections": [
+        "pds5-projects",
+        "pds5-jobs"
+    ],
+    "props": {}
+}

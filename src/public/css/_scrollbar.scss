@@ -1,0 +1,52 @@
+::-webkit-scrollbar {
+    width: 14px;
+    background-color: transparent;
+    box-shadow: inset 0 0 1px 1px $lightBlue;
+}
+::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 1em;
+    -webkit-border-radius: 1em;
+    -moz-border-radius: 1em;
+    -o-border-radius: 1em;
+}
+::-webkit-scrollbar-track-piece:active {
+    background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #00a2eb;
+    border-radius: 1em;
+    -webkit-border-radius: 1em;
+    -moz-border-radius: 1em;
+    -o-border-radius: 1em;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: $lightBlue;
+}
+::-webkit-scrollbar-thumb:active {
+    background-color: #00a2eb;
+}
+::-webkit-scrollbar-button {
+    background-color: #00a2eb;
+    border-radius: 1em;
+    -webkit-border-radius: 1em;
+    -moz-border-radius: 1em;
+    -o-border-radius: 1em;
+}
+::-webkit-scrollbar-button:hover {
+    background-color: $lightBlue;
+}
+::-webkit-scrollbar-button:active {
+    background-color: $dimBlue;
+}
+::-webkit-scrollbar-corner {
+    background-color: #1b002e;
+}
+::selection {
+    background: #017ab1;
+    color: #e8f8ff;
+}
+::selection:window-inactive {
+    background-color: #00a2eb;
+    color: #e8f8ff;
+}

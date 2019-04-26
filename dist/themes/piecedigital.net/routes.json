@@ -1,0 +1,24 @@
+{
+    "/$": {
+        "params": {
+            "title": "Piece Digital | Web Developer"
+        },
+        "page": "home.handlebars",
+        "queryList": [
+            {
+                "collectionName": "pds5-projects",
+                "query": {}
+            },
+            {
+                "collectionName": "pds5-jobs",
+                "query": {}
+            }
+        ]
+    },
+    "404": {
+        "params": {
+            "title": "404: Not Found"
+        },
+        "page": "404.handlebars"
+    }
+}
