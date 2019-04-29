@@ -24,6 +24,7 @@ var Database = /** @class */ (function () {
     Database.prototype.connect = function (DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME) {
         var _this = this;
         var url = "mongodb://" + DB_USER + ":" + DB_PASS + "@" + (DB_HOST || "localhost") + ":" + (DB_PORT || 27017) + "/" + DB_NAME;
+        console.log("Connecting to DB server:", url);
         mongoose_1.connect(url, {
             useNewUrlParser: true
         }, function (err) {

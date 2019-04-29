@@ -48,6 +48,8 @@ class Database {
     connect(DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME) {
         var url = `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST || "localhost"}:${DB_PORT || 27017}/${DB_NAME}`;
 
+        console.log("Connecting to DB server:", url);
+
         connect(url, {
             useNewUrlParser: true
         }, err => {
