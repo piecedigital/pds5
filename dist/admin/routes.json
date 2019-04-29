@@ -5,8 +5,8 @@
     "/pc_admin/signup": {
         "page": "signup.handlebars"
     },
-    "/pc_admin/setup": {
-        "page": "setup.handlebars"
+    "/pc_admin/db-setup": {
+        "page": "db-setup.handlebars"
     },
     "/pc_admin/plugin/{:plug}": {
         "page": "../../plugins/{:plug}/index.handlebars"
