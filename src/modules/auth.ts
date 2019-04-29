@@ -45,7 +45,7 @@ export function authenticate(dbs: Database, body: any, pass: (sessId: Types.Obje
 
     new Promise((resolve, reject) => {
         dbs.AdminUserModel.findOne({
-            name: body.username,
+            name: body.username.toLowerCase(),
         } as UserInterface, (err, doc: UserInterface) => {
             if(err) {
                 fail();

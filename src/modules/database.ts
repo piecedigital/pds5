@@ -46,7 +46,7 @@ class Database {
     }
 
     connect(DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME) {
-        var url = `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST || "localhost"}:${DB_PORT || 27017}/${DB_NAME}${process.env["NODE_ENV"] === "prod" ? `?ssl=true&ssl_ca_certs=${join(__dirname, "..", "rds-combined-ca-bundle.pem")}` : ""}`;
+        var url = `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST || "localhost"}:${DB_PORT || 27017}/${DB_NAME}${process.env["NODE_ENV"] === "prod" ? `?ssl=true&ssl_ca_certs="${join(__dirname, "..", "rds-combined-ca-bundle.pem")}"` : ""}`;
 
         console.log("Connecting to DB server:", url);
 

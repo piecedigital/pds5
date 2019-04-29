@@ -39,7 +39,7 @@ function authenticate(dbs, body, pass, fail) {
     console.log("Authenticating...");
     new Promise(function (resolve, reject) {
         dbs.AdminUserModel.findOne({
-            name: body.username,
+            name: body.username.toLowerCase(),
         }, function (err, doc) {
             if (err) {
                 fail();
