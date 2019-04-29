@@ -271,6 +271,56 @@ form > div:not(:last-child) {
   width: 60%;
 }
 
+.portfolio {
+  margin: 0 auto;
+}
+.portfolio form {
+  max-width: 800px;
+}
+.portfolio form.add-project-form input,
+.portfolio form.add-project-form textarea {
+  width: 100%;
+}
+
+.projects {
+  display: flex;
+  flex-wrap: wrap;
+}
+.projects input {
+  display: none;
+}
+.projects input:checked + .project {
+  box-shadow: 0 0 0 4px green;
+}
+.projects .project {
+  display: flex;
+  align-items: baseline;
+  max-width: 25%;
+  padding: 8px;
+  margin: 8px;
+  box-shadow: 0 0 0 1px black;
+}
+.projects .project label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+}
+.projects .project .image {
+  display: inline-block;
+  width: 40%;
+}
+.projects .project .image img {
+  max-width: 100%;
+}
+.projects .project .info {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60%;
+}
+
 .portfolio.piecedigital-net {
   display: flex;
   flex-direction: column;

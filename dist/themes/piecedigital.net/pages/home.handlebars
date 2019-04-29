@@ -304,6 +304,22 @@
 </div>
 <script type="text/javascript" src="public/js/jquery-1.11.2.min.js"></script>
 <script type="text/javascript">
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    function formatDate(date) {
+        var year = date.getFullYear();
+        var month = date.getMonth();
+        var finalString = months[month] + " " + year;
+
+        var currentDate = new Date(new Date().getFullYear(), new Date().getMonth());
+        if (
+            date.getTime() > currentDate.getTime()
+        ) {
+            finalString = "Current";
+        }
+
+        return finalString;
+    }
+
     // experience
     function generateExperienceElement(options) {
         var elem =
@@ -335,7 +351,7 @@
             .append(
                 $("<h3>")
                 .attr("class", "dark-grey-text font-size-0_8")
-                .text(options.jobStart + " - " + options.jobEnd)
+                .text(formatDate(new Date(options.jobStart)) + " - " + formatDate(new Date(options.jobEnd)))
             ),
             $("<p>")
             .html((typeof options.description === "object") ? options.description.join("<br><br>"): options.description),

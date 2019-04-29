@@ -14,7 +14,9 @@ function splitTheLines(str) {
 function keyify(arr) {
     var results = {};
     arr.map(function (str) {
-        var keyValSplit = str.split(/:\s?/);
+        var keyValSplit = str.split(/^(\w+):\s?/);
+        if (!keyValSplit[0])
+            keyValSplit.shift();
         // console.log(str, keyValSplit);
         var key = keyValSplit[0];
         var vals = keyValSplit[1];

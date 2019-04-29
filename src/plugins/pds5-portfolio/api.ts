@@ -20,7 +20,8 @@ function keyify(arr: string[]): Record<string, any> {
 
     arr.map(str => {
 
-        const keyValSplit = str.split(/:\s?/)
+        const keyValSplit = str.split(/^(\w+):\s?/);
+        if (!keyValSplit[0]) keyValSplit.shift();
         // console.log(str, keyValSplit);
 
         const key = keyValSplit[0];
