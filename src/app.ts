@@ -2,8 +2,6 @@ import * as express from "express";
 import { join } from "path";
 import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
-// import { Types } from "mongoose";
-// import * as bcrypt from "bcryptjs";
 import * as helmet from "helmet";
 import adminRoutes from "./modules/admin-routes";
 import api from "./modules/api";
@@ -12,10 +10,8 @@ import pluginRoutes from "./modules/plugin-routes";
 import Database from "./modules/database";
 import Store from "./modules/store";
 import { getView } from "./modules/render";
-// import { UserInterface, User } from "./modules/user.class";
 import { registerAdminView } from "./modules/register-admin-view";
 import { getPlugins } from "./modules/helpers";
-// import { readFile } from "fs";
 
 const dbs = new Database();
 const store = new Store();
@@ -93,6 +89,14 @@ app.get("*", (req, res) => {
         title: "Not Found",
         viewName: "404"
     }));
+});
+
+// report violations
+
+app.use("/report-violation", (req, res) => {
+    console.log("CPS Violation:", req.body);
+
+    res.status(401).send("");
 });
 
 app.listen(PORT, () => {

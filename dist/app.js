@@ -4,8 +4,6 @@ var express = require("express");
 var path_1 = require("path");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
-// import { Types } from "mongoose";
-// import * as bcrypt from "bcryptjs";
 var helmet = require("helmet");
 var admin_routes_1 = require("./modules/admin-routes");
 var api_1 = require("./modules/api");
@@ -14,10 +12,8 @@ var plugin_routes_1 = require("./modules/plugin-routes");
 var database_1 = require("./modules/database");
 var store_1 = require("./modules/store");
 var render_1 = require("./modules/render");
-// import { UserInterface, User } from "./modules/user.class";
 var register_admin_view_1 = require("./modules/register-admin-view");
 var helpers_1 = require("./modules/helpers");
-// import { readFile } from "fs";
 var dbs = new database_1.default();
 var store = new store_1.default();
 function getPluginsAndRegister() {
@@ -86,6 +82,11 @@ app.get("*", function (req, res) {
         title: "Not Found",
         viewName: "404"
     }));
+});
+// report violations
+app.use("/report-violation", function (req, res) {
+    console.log("CPS Violation:", req.body);
+    res.status(401).send("");
 });
 app.listen(PORT, function () {
     console.log("Listening on port", PORT);

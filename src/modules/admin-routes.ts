@@ -29,7 +29,7 @@ app.get("*", (req, res, next) => {
 app.get("/", csrfProtection, (req, res) => {
     authorize(
         req, dbs,
-        () => {
+        /* pass */() => {
             getView(up(req.url), {
                 title: "Admin Dashboard",
                 data: {
@@ -41,7 +41,7 @@ app.get("/", csrfProtection, (req, res) => {
             })
             .catch(e => console.error(e));
         },
-        () => res.redirect("/pc_admin/login")
+        /* fail */() => res.redirect("/pc_admin/login")
     );
 });
 
@@ -63,27 +63,31 @@ app.get("/db-setup", csrfProtection, (req, res) => {
 });
 
 app.post("/db-setup", csrfProtection, (req, res) => {
-    const {
-        username,
-        password,
-        dbName,
-        dbHost
-    } = req.body;
+    if (!dbs.Connected) {
+        const {
+            username,
+            password,
+            dbName,
+            dbHost
+        } = req.body;
 
-    dbs.connect(username, password, dbHost, process.env["DB_PORT"] || 27017, dbName);
-    dbs.successCallback = () => {
-        console.log("successful connection");
-        res.redirect("/pc_admin");
+        dbs.connect(username, password, dbHost, process.env["DB_PORT"] || 27017, dbName);
+        dbs.successCallback = () => {
+            console.log("successful connection");
+            res.redirect("/pc_admin");
 
-        updateSRVConfig({
-            DB_USER: username,
-            DB_PASS: password,
-            DB_NAME: dbName,
-            DB_HOST: dbHost,
-        });
-    };
-    dbs.errorCallback = err => {
-        console.error(err);
+            updateSRVConfig({
+                DB_USER: username,
+                DB_PASS: password,
+                DB_NAME: dbName,
+                DB_HOST: dbHost,
+            });
+        };
+        dbs.errorCallback = err => {
+            console.error(err);
+        }
+    } else {
+        res.redirect("/pc_admin/db-setup");
     }
 });
 
@@ -137,8 +141,6 @@ app.get("/signup", csrfProtection, (req, res) => {
 
 // app.get(/^\/plugin\/(.+)?$/i, (req, res) => { // might need this later if plugins get other paths
 app.get("/plugin/:plug", (req, res) => {
-    console.log(req.params.plug);
-
     authorize(
         req, dbs,
         () => {
@@ -174,25 +176,29 @@ app.post("/login", csrfProtection, (req, res) => {
 });
 
 app.post("/signup", csrfProtection, (req, res) => {
-    if(req.body.password === req.body.password) {
-        const newAdminUser = new dbs.AdminUserModel({
-            _id: new Types.ObjectId(),
-            displayName: req.body.displayName,
-            name: req.body.username.toLowerCase(),
-            password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync())
-        } as User);
+    if (dbs.Connected) {
+        if(req.body.password === req.body.password) {
+            const newAdminUser = new dbs.AdminUserModel({
+                _id: new Types.ObjectId(),
+                displayName: req.body.displayName,
+                name: req.body.username.toLowerCase(),
+                password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync())
+            } as User);
 
-        newAdminUser.save((err) => {
-            if (err) {
-                console.error(err);
-                res.redirect("/pc_admin/signup");
-            } else {
-                console.log("created admin user");
-                res.redirect("/pc_admin/login");
-            }
-        });
+            newAdminUser.save((err) => {
+                if (err) {
+                    console.error(err);
+                    res.redirect("/pc_admin/signup");
+                } else {
+                    console.log("created admin user");
+                    res.redirect("/pc_admin/login");
+                }
+            });
+        } else {
+            res.redirect("/pc_admin/signup");
+        }
     } else {
-        res.redirect("/pc_admin/signup");
+        res.redirect("/pc_admin/db-setup");
     }
 });
 

@@ -182,10 +182,15 @@ projects.map((proj, order) => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(reformatted)
+            body: JSON.stringify(reformatted),
+            credentials: "same-origin"
         })
         .then(r => {
-            console.log(r);
+            if (r.status < 400) {
+                console.log("sent", reformatted);
+            } else {
+                console.log(r.status, r.statusText);
+            }
         })
         .catch(e => console.error(e));
 });
@@ -335,10 +340,15 @@ experience.reverse().map((proj, order) => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(reformatted)
+            body: JSON.stringify(reformatted),
+            credentials: "same-origin"
         })
         .then(r => {
-            console.log("sent", reformatted);
+            if (r.status < 400) {
+                console.log("sent", reformatted);
+            } else {
+                console.log(r.status, r.statusText);
+            }
         })
         .catch(e => console.error(e));
 });

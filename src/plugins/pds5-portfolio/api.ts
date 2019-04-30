@@ -4,6 +4,7 @@ import Database from "../../modules/database";
 import Store from "../../modules/store";
 import { ProjectModel, Project } from "./project.class";
 import { JobModel } from "./job.class";
+import { authorize } from "../../modules/auth";
 
 const app = express();
 let dbs: Database = null;
@@ -39,113 +40,147 @@ function keyify(arr: string[]): Record<string, any> {
 app.post("/pds5/add-project", (req, res) => {
     let order = 0;
 
-    ProjectModel.find().sort({_id:-1}).limit(1)
-        .then((doc) => {
-            if (doc[0]) order = (<Project><object>doc[0]).order + 1;
-        })
-        .then(() => {
-            const project = new ProjectModel({
-                projectPK: uuid(),
-                show: true,
-                projectName: req.body["projectName"].split(/,\s?/),
-                refName: req.body["projectName"]
-                    .split(/,\s?/)[0]
-                    .replace(/\s/g, "_")
-                    .replace(/[^a-zA-Z0-9_]/g, "")
-                    .toLowerCase(),
-                img: req.body["projectImage"] ? true : false,
-                desc: splitTheLines(req.body["projectDescription"]),
-                skillsApplied: keyify(splitTheLines(req.body["projectSkills"])),
-                relatedLinks: splitTheLines(req.body["projectLinks"]),
-                gallery: parseInt(req.body["projectGallery"]),
-                order: parseInt(req.body["order"]) || order
-            });
+    authorize(req, dbs,
+        /* pass */() => {
+        ProjectModel.find().sort({_id:-1}).limit(1)
+            .then((doc) => {
+                if (doc[0]) order = (<Project><object>doc[0]).order + 1;
+            })
+            .then(() => {
+                const project = new ProjectModel({
+                    projectPK: uuid(),
+                    show: true,
+                    projectName: req.body["projectName"].split(/,\s?/),
+                    refName: req.body["projectName"]
+                        .split(/,\s?/)[0]
+                        .replace(/\s/g, "_")
+                        .replace(/[^a-zA-Z0-9_]/g, "")
+                        .toLowerCase(),
+                    img: req.body["projectImage"] ? true : false,
+                    desc: splitTheLines(req.body["projectDescription"]),
+                    skillsApplied: keyify(splitTheLines(req.body["projectSkills"])),
+                    relatedLinks: splitTheLines(req.body["projectLinks"]),
+                    gallery: parseInt(req.body["projectGallery"]),
+                    order: parseInt(req.body["order"]) || order
+                });
 
-            project.save((err) => {
-                if (err) return console.error(err);
-                console.log("project added");
+                project.save((err) => {
+                    if (err) return console.error(err);
+                    console.log("project added");
+                    res.redirect(req.headers.referer);
+                });
+            })
+            .catch(e => {
                 res.redirect(req.headers.referer);
+                console.error(e);
             });
-        })
-        .catch(e => {
-            res.redirect(req.headers.referer);
-            console.error(e);
+        },
+        /* fail */() => {
+            res.status(401).send("401: Unauthorized Access");
         });
 });
 
 app.post("/pds5/show-or-hide-project", (req, res) => {
-    ProjectModel.updateOne({
-        projectPK: req.body["projectPK"]
-    }, {
-        $set: {
-            show: req.body["projectShow"]
-        }
-    }, (err, doc) => {
-        if (err) {
-            return console.error(err);
-        }
+    authorize(req, dbs,
+        /* pass */ () => {
+            ProjectModel.updateOne({
+                projectPK: req.body["projectPK"]
+            }, {
+                $set: {
+                    show: req.body["projectShow"]
+                }
+            }, (err, doc) => {
+                if (err) {
+                    return console.error(err);
+                }
 
-        console.log("Project updated", doc);
-    });
+                console.log("Project updated", doc);
+            });
+        },
+        /* fail */ () => {
+            res.status(401).send("401: Unauthorized Access");
+        });
 });
 
 app.post("/pds5/remove-project", (req, res) => {
-    console.log(req.body);
-    ProjectModel.findOneAndRemove({
-        projectPK: req.body.projectPK
-    }, (err) => {
-        if (err) return console.error(err);
-        console.log("project removed");
-        res.redirect(req.headers.referer);
-    });
+    authorize(req, dbs,
+        /* pass */ () => {
+            ProjectModel.findOneAndRemove({
+                projectPK: req.body.projectPK
+            }, (err) => {
+                if (err) return console.error(err);
+                console.log("project removed");
+                res.redirect(req.headers.referer);
+            });
+        },
+        /* fail */ () => {
+            res.status(401).send("401: Unauthorized Access");
+        });
 });
 
 // JOB API
 app.post("/pds5/add-job", (req, res) => {
-    const job = new JobModel({
-        jobPK: uuid(),
-        show: true,
-        jobTitle: req.body["jobTitle"],
-        jobSite: req.body["jobSite"] || "",
-        jobName: req.body["jobName"],
-        jobStart: new Date(req.body["jobStartDate"]),
-        jobEnd: req.body["jobIsCurrent"] === "true" ? new Date("5000") : new Date(req.body["jobStartDate"]),
-        description: splitTheLines(req.body["jobDescription"]),
-        jobTasks: splitTheLines(req.body["jobTasks"]),
-    });
+    authorize(req, dbs,
+        /* pass */ () => {
+            const job = new JobModel({
+                jobPK: uuid(),
+                show: true,
+                jobTitle: req.body["jobTitle"],
+                jobSite: req.body["jobSite"] || "",
+                jobName: req.body["jobName"],
+                jobStart: new Date(req.body["jobStartDate"]),
+                jobEnd: req.body["jobIsCurrent"] === "true" ? new Date("5000") : new Date(req.body["jobStartDate"]),
+                description: splitTheLines(req.body["jobDescription"]),
+                jobTasks: splitTheLines(req.body["jobTasks"]),
+            });
 
-    job.save((err) => {
-        if (err) return console.error(err);
-        console.log("job added");
-        res.redirect(req.headers.referer);
-    });
+            job.save((err) => {
+                if (err) return console.error(err);
+                console.log("job added");
+                res.redirect(req.headers.referer);
+            });
+        },
+        /* fail */ () => {
+            res.status(401).send("401: Unauthorized Access");
+        });
 });
 
 app.post("/pds5/show-or-hide-job", (req, res) => {
-    JobModel.updateOne({
-        jobPK: req.body["jobPK"]
-    }, {
-        $set: {
-            show: req.body["jobShow"]
-        }
-    }, (err, doc) => {
-        if (err) {
-            return console.error(err);
-        }
+    authorize(req, dbs,
+        /* pass */ () => {
+            JobModel.updateOne({
+                jobPK: req.body["jobPK"]
+            }, {
+                $set: {
+                    show: req.body["jobShow"]
+                }
+            }, (err, doc) => {
+                if (err) {
+                    return console.error(err);
+                }
 
-        console.log("Job updated", doc);
-    });
+                console.log("Job updated", doc);
+            });
+        },
+        /* fail */ () => {
+            res.status(401).send("401: Unauthorized Access");
+        });
 });
 
 app.post("/pds5/remove-job", (req, res) => {
-    // console.log(req.body);
-    JobModel.findOneAndRemove({
-        jobPK: req.body.jobPK
-    }, (err, doc) => {
-        if (err) return console.error(err);
-        console.log("job removed", doc);
-        res.redirect(req.headers.referer);
-    });
+    authorize(req, dbs,
+        /* pass */ () => {
+            JobModel.findOneAndRemove({
+                jobPK: req.body.jobPK
+            }, (err, doc) => {
+                if (err) return console.error(err);
+                console.log("job removed", doc);
+                res.redirect(req.headers.referer);
+            });
+        },
+        /* fail */ () => {
+            res.status(401).send("401: Unauthorized Access");
+        });
 });
 
 export default function (db, str) {

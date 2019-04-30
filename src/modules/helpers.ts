@@ -14,7 +14,6 @@ export interface CollectionQuery {
     query: Record<string, string>;
 }
 
-
 export interface regexURLreturn {
     regexURL?: RegExp;
     params?: Record<string, any>;

@@ -18,7 +18,6 @@ app.get("/", function (req, res) {
         .catch(function (e) { return console.error(e); });
 });
 app.get("/*", function (req, res) {
-    console.log(req.url);
     render_1.getView(up(req.url), {
         title: "Home",
         database: dbs

@@ -5,7 +5,7 @@ var mongoose_1 = require("mongoose");
 var bcrypt = require("bcryptjs");
 var app = express();
 /**
- * Handles use authorization to access some paths
+ * Handles authorization to access some paths
  * @param req Request object
  * @param dbs Database object
  * @param pass Callback if authorization passes
@@ -18,7 +18,7 @@ function authorize(req, dbs, pass, fail) {
         _id = mongoose_1.Types.ObjectId(req.cookies["sessId"]);
     }
     catch (error) {
-        console.error("improper session id");
+        console.error("Improper/non-existant session id");
     }
     dbs.SessionModel.findOne({
         _id: _id

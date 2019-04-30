@@ -8,7 +8,7 @@ import { UserInterface } from "./user.class";
 const app = express();
 
 /**
- * Handles use authorization to access some paths
+ * Handles authorization to access some paths
  * @param req Request object
  * @param dbs Database object
  * @param pass Callback if authorization passes
@@ -22,7 +22,7 @@ export function authorize(req: express.Request, dbs: Database, pass: () => void,
     try {
         _id = Types.ObjectId(req.cookies["sessId"]);
     } catch (error) {
-        console.error("improper session id");
+        console.error("Improper/non-existant session id");
     }
 
     dbs.SessionModel.findOne({

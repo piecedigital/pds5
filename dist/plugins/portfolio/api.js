@@ -7,6 +7,7 @@ DO NOT REMOVE
 var express = require("express");
 var portfolio_class_1 = require("./portfolio.class");
 var uuid = require("uuid/v1");
+var auth_1 = require("../../modules/auth");
 var app = express();
 var dbs = null;
 var store = null;
@@ -16,28 +17,39 @@ ADD YOUR CUSTOM ROUTES HERE
 */
 // Portfolio API
 app.post("/add-project", function (req, res) {
-    var project = new portfolio_class_1.ProjectModel({
-        projectPK: uuid(),
-        name: req.body["name"],
-        description: req.body["description"],
-        projectURL: req.body["project-url"],
-    });
-    project.save(function (err) {
-        if (err)
-            return console.error(err);
-        console.log("project added");
-        res.redirect(req.headers.referer);
+    auth_1.authorize(req, dbs, 
+    /* pass */ function () {
+        var project = new portfolio_class_1.ProjectModel({
+            projectPK: uuid(),
+            name: req.body["name"],
+            description: req.body["description"],
+            projectURL: req.body["project-url"],
+        });
+        project.save(function (err) {
+            if (err)
+                return console.error(err);
+            console.log("project added");
+            res.redirect(req.headers.referer);
+        });
+    }, 
+    /* fail */ function () {
+        res.status(401).send("401: Unauthorized Access");
     });
 });
 app.post("/remove-project", function (req, res) {
-    console.log(req.body);
-    dbs.dbs.collection("portfolios").remove({
-        projectPK: req.body.projectPK
-    }, function (err) {
-        if (err)
-            return console.error(err);
-        console.log("project removed");
-        res.redirect(req.headers.referer);
+    auth_1.authorize(req, dbs, 
+    /* pass */ function () {
+        dbs.dbs.collection("portfolios").remove({
+            projectPK: req.body.projectPK
+        }, function (err) {
+            if (err)
+                return console.error(err);
+            console.log("project removed");
+            res.redirect(req.headers.referer);
+        });
+    }, 
+    /* fail */ function () {
+        res.status(401).send("401: Unauthorized Access");
     });
 });
 // END CUSTOM ROUTES

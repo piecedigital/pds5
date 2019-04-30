@@ -23,7 +23,8 @@ app.get("*", function (req, res, next) {
     }
 });
 app.get("/", csrfProtection, function (req, res) {
-    auth_1.authorize(req, dbs, function () {
+    auth_1.authorize(req, dbs, 
+    /* pass */ function () {
         render_1.getView(up(req.url), {
             title: "Admin Dashboard",
             data: {
@@ -34,7 +35,8 @@ app.get("/", csrfProtection, function (req, res) {
             res.send(result);
         })
             .catch(function (e) { return console.error(e); });
-    }, function () { return res.redirect("/pc_admin/login"); });
+    }, 
+    /* fail */ function () { return res.redirect("/pc_admin/login"); });
 });
 app.get("/db-setup", csrfProtection, function (req, res) {
     if (dbs.Connected) {
@@ -54,21 +56,26 @@ app.get("/db-setup", csrfProtection, function (req, res) {
     }
 });
 app.post("/db-setup", csrfProtection, function (req, res) {
-    var _a = req.body, username = _a.username, password = _a.password, dbName = _a.dbName, dbHost = _a.dbHost;
-    dbs.connect(username, password, dbHost, process.env["DB_PORT"] || 27017, dbName);
-    dbs.successCallback = function () {
-        console.log("successful connection");
-        res.redirect("/pc_admin");
-        helpers_1.updateSRVConfig({
-            DB_USER: username,
-            DB_PASS: password,
-            DB_NAME: dbName,
-            DB_HOST: dbHost,
-        });
-    };
-    dbs.errorCallback = function (err) {
-        console.error(err);
-    };
+    if (!dbs.Connected) {
+        var _a = req.body, username_1 = _a.username, password_1 = _a.password, dbName_1 = _a.dbName, dbHost_1 = _a.dbHost;
+        dbs.connect(username_1, password_1, dbHost_1, process.env["DB_PORT"] || 27017, dbName_1);
+        dbs.successCallback = function () {
+            console.log("successful connection");
+            res.redirect("/pc_admin");
+            helpers_1.updateSRVConfig({
+                DB_USER: username_1,
+                DB_PASS: password_1,
+                DB_NAME: dbName_1,
+                DB_HOST: dbHost_1,
+            });
+        };
+        dbs.errorCallback = function (err) {
+            console.error(err);
+        };
+    }
+    else {
+        res.redirect("/pc_admin/db-setup");
+    }
 });
 app.get("/logout", function (req, res) {
     // console.log(`"/pc_admin-logout"`, req.path);
@@ -118,7 +125,6 @@ app.get("/signup", csrfProtection, function (req, res) {
 });
 // app.get(/^\/plugin\/(.+)?$/i, (req, res) => { // might need this later if plugins get other paths
 app.get("/plugin/:plug", function (req, res) {
-    console.log(req.params.plug);
     auth_1.authorize(req, dbs, function () {
         helpers_1.aggregateOnePluginData(req.params.plug, dbs, store, null, function (data) {
             // console.log("DATAAAAAAAA", data);
@@ -148,26 +154,31 @@ app.post("/login", csrfProtection, function (req, res) {
     });
 });
 app.post("/signup", csrfProtection, function (req, res) {
-    if (req.body.password === req.body.password) {
-        var newAdminUser = new dbs.AdminUserModel({
-            _id: new mongoose_1.Types.ObjectId(),
-            displayName: req.body.displayName,
-            name: req.body.username.toLowerCase(),
-            password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync())
-        });
-        newAdminUser.save(function (err) {
-            if (err) {
-                console.error(err);
-                res.redirect("/pc_admin/signup");
-            }
-            else {
-                console.log("created admin user");
-                res.redirect("/pc_admin/login");
-            }
-        });
+    if (dbs.Connected) {
+        if (req.body.password === req.body.password) {
+            var newAdminUser = new dbs.AdminUserModel({
+                _id: new mongoose_1.Types.ObjectId(),
+                displayName: req.body.displayName,
+                name: req.body.username.toLowerCase(),
+                password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync())
+            });
+            newAdminUser.save(function (err) {
+                if (err) {
+                    console.error(err);
+                    res.redirect("/pc_admin/signup");
+                }
+                else {
+                    console.log("created admin user");
+                    res.redirect("/pc_admin/login");
+                }
+            });
+        }
+        else {
+            res.redirect("/pc_admin/signup");
+        }
     }
     else {
-        res.redirect("/pc_admin/signup");
+        res.redirect("/pc_admin/db-setup");
     }
 });
 function default_1(db, str) {

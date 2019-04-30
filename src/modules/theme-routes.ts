@@ -23,8 +23,6 @@ app.get("/", (req, res) => {
 });
 
 app.get("/*", (req, res) => {
-    console.log(req.url);
-
     getView(up(req.url), {
             title: "Home",
             database: dbs
