@@ -350,7 +350,7 @@ form {
 /////////////////////////////
 
 // portfolio plugin
-.portfolio {
+.example-portfolio {
     margin: 0 auto;
 
     form {
@@ -358,58 +358,58 @@ form {
 
         &.add-project-form {
 
-            input,
+            input:not([type="checkbox"]),
             textarea {
                 width: 100%;
             }
         }
     }
-}
-
-.projects {
-    display: flex;
-    flex-wrap: wrap;
-
-    input {
-        display: none;
-
-        &:checked + .project {
-            box-shadow: 0 0 0 4px green;
-        }
-    }
-
-    .project {
+    .projects {
         display: flex;
-        align-items: baseline;
-        max-width: 25%;
-        padding: 8px;
-        margin: 8px;
-        box-shadow: 0 0 0 1px black;
+        flex-wrap: wrap;
 
-        label {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: black;
-        }
+        input {
+            display: none;
 
-        .image {
-            display: inline-block;
-            width: 40%;
-            img {
-                max-width: 100%;
+            &:checked + .project {
+                box-shadow: 0 0 0 4px green;
             }
         }
 
-        .info {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            width: 60%;
+        .project {
+            display: flex;
+            align-items: baseline;
+            max-width: 25%;
+            padding: 8px;
+            margin: 8px;
+            box-shadow: 0 0 0 1px black;
+
+            label {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-decoration: none;
+                color: black;
+            }
+
+            .image {
+                display: inline-block;
+                width: 40%;
+                img {
+                    max-width: 100%;
+                }
+            }
+
+            .info {
+                display: inline-flex;
+                flex-direction: column;
+                align-items: center;
+                width: 60%;
+            }
         }
     }
 }
+
 
 // piecedigital.net portfolio plugin
 .portfolio.piecedigital-net {
@@ -423,7 +423,6 @@ form {
 
         &.add-project-form,
         &.add-job-form {
-
             input:not([type="checkbox"]),
             textarea {
                 width: 100%;

@@ -271,28 +271,27 @@ form > div:not(:last-child) {
   width: 60%;
 }
 
-.portfolio {
+.example-portfolio {
   margin: 0 auto;
 }
-.portfolio form {
+.example-portfolio form {
   max-width: 800px;
 }
-.portfolio form.add-project-form input,
-.portfolio form.add-project-form textarea {
+.example-portfolio form.add-project-form input:not([type=checkbox]),
+.example-portfolio form.add-project-form textarea {
   width: 100%;
 }
-
-.projects {
+.example-portfolio .projects {
   display: flex;
   flex-wrap: wrap;
 }
-.projects input {
+.example-portfolio .projects input {
   display: none;
 }
-.projects input:checked + .project {
+.example-portfolio .projects input:checked + .project {
   box-shadow: 0 0 0 4px green;
 }
-.projects .project {
+.example-portfolio .projects .project {
   display: flex;
   align-items: baseline;
   max-width: 25%;
@@ -300,21 +299,21 @@ form > div:not(:last-child) {
   margin: 8px;
   box-shadow: 0 0 0 1px black;
 }
-.projects .project label {
+.example-portfolio .projects .project label {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-decoration: none;
   color: black;
 }
-.projects .project .image {
+.example-portfolio .projects .project .image {
   display: inline-block;
   width: 40%;
 }
-.projects .project .image img {
+.example-portfolio .projects .project .image img {
   max-width: 100%;
 }
-.projects .project .info {
+.example-portfolio .projects .project .info {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
