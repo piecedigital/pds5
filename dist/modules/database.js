@@ -24,7 +24,7 @@ var Database = /** @class */ (function () {
     Database.prototype.connect = function (DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME) {
         var _this = this;
         var url = "mongodb://" + DB_USER + ":" + DB_PASS + "@" + (DB_HOST || "localhost") + ":" + (DB_PORT || 27017) + "/" + DB_NAME + (process.env["NODE_ENV"] === "prod" ? "?ssl=true&ssl_ca_certs=\"" + path_1.join(__dirname, "..", "rds-combined-ca-bundle.pem") + "\"" : "");
-        console.log("Connecting to DB server:", url);
+        console.log("Connecting to DB server:", url.replace(DB_PASS, "<password>"));
         mongoose_1.connect(url, {
             useNewUrlParser: true
         }, function (err) {
